@@ -1,0 +1,145 @@
+Microsoft (R) Macro Assembler Version 14.30.30709.0	    05/13/23 15:06:30
+asm1.asm						     Page 1 - 1
+
+
+				.686
+				.model flat
+ 00000000			.code
+
+				;prog-cpp.ru
+
+
+
+ 00000000			_sumper proc ;процедура - функци€ в ассемблере
+ 00000000  8B 44 24 04			mov eax, DWORD ptr[esp + 4]
+ 00000004  8B 5C 24 08			mov ebx, DWORD ptr[esp + 8]
+ 00000008  03 C3			add eax, ebx
+ 0000000A  8B CC			mov ecx, esp
+ 0000000C  C3				ret ;возврат 
+ 0000000D			_sumper endp
+
+
+
+ 0000000D			_iteration proc
+ 0000000D  8B 5C 24 04		     mov ebx, dword ptr[esp + 4]
+
+ 00000011  83 FB 00		    cmp ebx, 0
+ 00000014  74 02		    je zero
+ 00000016  7F 05		    jg not_zero
+ 00000018			    zero:
+ 00000018  B8 00000001		        mov eax, 1
+
+ 0000001D			    not_zero:
+ 0000001D  6B DB 02		        imul ebx, 2
+ 00000020  43			        inc ebx
+ 00000021  8B C3		        mov eax, ebx
+ 00000023  C3			       ret
+ 00000024			_iteration endp
+
+
+ 00000024			_factorial proc
+ 00000024  8B 44 24 04		    mov eax, dword ptr[esp + 4]
+ 00000028  BB 00000001		    mov ebx, 1
+
+ 0000002D  83 F8 01		    cmp eax, 1
+ 00000030  74 0D		    je return_1
+ 00000032  EB 00		    jmp factorial
+
+ 00000034			    factorial:
+ 00000034  0F AF D8		    imul ebx, eax
+ 00000037  48			    dec eax
+ 00000038  83 F8 01		    cmp eax, 1
+ 0000003B  74 08		    je return
+ 0000003D  EB F5		    jmp factorial
+
+ 0000003F			    return_1:
+ 0000003F  B8 00000001		    mov eax, 1
+ 00000044  C3			    ret 
+
+ 00000045			    return:
+ 00000045  8B C3		    mov eax, ebx
+ 00000047  C3			    ret
+
+ 00000048			_factorial endp
+
+
+
+ 00000048			_sinus_asm proc
+
+ 00000048  DB 44 24 04		fild dword ptr[esp + 4]; тут фактариал
+ 0000004C  D9 44 24 08		fld DWORD ptr[esp + 8]; тут угол x(float)
+ 00000050  8B 44 24 0C		mov eax, dword ptr[esp + 12]; тут степень
+
+ 00000054  D9 54 24 FC		fst dword ptr[esp - 4]; тут константа умножени€
+
+
+ 00000058  83 F8 01		cmp eax, 1
+ 0000005B  74 0E		je devision
+ 0000005D  EB 00		jmp degree
+
+ 0000005F			degree:
+ 0000005F  D8 4C 24 FC		fmul dword ptr[esp - 4]
+ 00000063  48			dec eax
+ 00000064  83 F8 01		cmp eax, 1
+ 00000067  74 02		je devision
+ 00000069  EB F4		jmp degree
+
+ 0000006B			devision:
+ 0000006B  D8 F1		fdiv st(0), st(1)
+ 0000006D  C3			ret
+ 0000006E			_sinus_asm endp
+
+
+
+
+
+
+				end ;указатель, где завершаетс€ трансл€ци€ программы
+Microsoft (R) Macro Assembler Version 14.30.30709.0	    05/13/23 15:06:30
+asm1.asm						     Symbols 2 - 1
+
+
+
+
+Segments and Groups:
+
+                N a m e                 Size     Length   Align   Combine Class
+
+FLAT . . . . . . . . . . . . . .	GROUP
+_DATA  . . . . . . . . . . . . .	32 Bit	 00000000 Para	  Public  'DATA'	
+_TEXT  . . . . . . . . . . . . .	32 Bit	 0000006E Para	  Public  'CODE'	
+
+
+Procedures, parameters, and locals:
+
+                N a m e                 Type     Value    Attr
+
+_factorial . . . . . . . . . . .	P Near	 00000024 _TEXT	Length= 00000024 Public
+  factorial  . . . . . . . . . .	L Near	 00000034 _TEXT	
+  return_1 . . . . . . . . . . .	L Near	 0000003F _TEXT	
+  return . . . . . . . . . . . .	L Near	 00000045 _TEXT	
+_iteration . . . . . . . . . . .	P Near	 0000000D _TEXT	Length= 00000017 Public
+  zero . . . . . . . . . . . . .	L Near	 00000018 _TEXT	
+  not_zero . . . . . . . . . . .	L Near	 0000001D _TEXT	
+_sinus_asm . . . . . . . . . . .	P Near	 00000048 _TEXT	Length= 00000026 Public
+  degree . . . . . . . . . . . .	L Near	 0000005F _TEXT	
+  devision . . . . . . . . . . .	L Near	 0000006B _TEXT	
+_sumper  . . . . . . . . . . . .	P Near	 00000000 _TEXT	Length= 0000000D Public
+
+
+Symbols:
+
+                N a m e                 Type     Value    Attr
+
+@CodeSize  . . . . . . . . . . .	Number	 00000000h   
+@DataSize  . . . . . . . . . . .	Number	 00000000h   
+@Interface . . . . . . . . . . .	Number	 00000000h   
+@Model . . . . . . . . . . . . .	Number	 00000007h   
+@code  . . . . . . . . . . . . .	Text   	 _TEXT
+@data  . . . . . . . . . . . . .	Text   	 FLAT
+@fardata?  . . . . . . . . . . .	Text   	 FLAT
+@fardata . . . . . . . . . . . .	Text   	 FLAT
+@stack . . . . . . . . . . . . .	Text   	 FLAT
+
+	   0 Warnings
+	   0 Errors
